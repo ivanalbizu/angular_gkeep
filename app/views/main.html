@@ -1,0 +1,53 @@
+<div class="grid" ng-init="getAll()">
+  <!--
+  Con el método getAll() se ahorraría usar:
+    ng-style="selected_color"
+    Dentro de "success" de saveColor(...) se podría llamar a getAll()
+  -->
+  <article ng-style="selected_color" ng-repeat="task in tasks | filter:search" style="background-color:{{task.color}}">
+    <header ng-style="selected_color" style="background-color:{{task.color}}">
+      <h2><input type="text" ng-change="update(task.id, task)" ng-model-options="{updateOn: 'blur'}" ng-model="task.title"></h2>
+      <div class="btn-group">
+        <a href="" class="dropdown-toggle" data-toggle="dropdown" title="Options">
+          <span class="glyphicon glyphicon-option-vertical"></span>
+        </a>
+        <ul class="dropdown-menu pull-right" role="menu" controller="CurrentTaskCtrl">
+          <li class="dropdown-header">Background color</li><br>
+          <li ng-click="saveColor(task.id, task, '132,198,100'); selected_color={backgroundColor:'rgba(132,198,100,0.90)'}">
+            <span class="glyphicon glyphicon-ok-circle selected-green"></span>
+          </li>
+          <li ng-click="saveColor(task.id, task, '255,95,39'); selected_color={backgroundColor:'rgba(255,95,39,0.90)'}">
+            <span class="glyphicon glyphicon-ok-circle selected-red"></span>
+          </li>
+          <li ng-click="saveColor(task.id, task, '62,75,78'); selected_color={backgroundColor:'rgba(62,75,78,0.90)'}">
+            <span class="glyphicon glyphicon-ok-circle selected-gray"></span>
+          </li>
+          <li ng-click="saveColor(task.id, task, '120,89,153'); selected_color={backgroundColor:'rgba(120,89,153,0.90)'}">
+            <span class="glyphicon glyphicon-ok-circle selected-purple"></span>
+          </li>
+          <li class="dropdown-header">Actions</li>
+          <li ng-click="delete(task.id)">
+            <span class="glyphicon glyphicon-trash" style="color:black;"></span>
+          </li>
+        </ul>
+      </div>
+    </header>
+    <div class="content">
+      <p><textarea class="edit" type="text" ng-change="update(task.id, task)" ng-model-options="{updateOn: 'blur'}" ng-model="task.description">{{task.description}}</textarea></p>
+    </div>
+    <footer>
+      <div class="left">Creation: {{task.created | date:"dd/MM/yyyy"}}</div>
+      <div class="right">Edition: {{task.updated | date:"dd/MM/yyyy h:mma"}}</div>
+    </footer>
+  </article>
+
+  <div id="newtask">
+    <form id="form">
+      <input type="text" ng-model="newtask.title" placeholder="Title">
+      <textarea ng-model="newtask.description" placeholder="Description"></textarea>
+      <a href="#/" ng-click="save(newtask)">Save</a>
+      <a href="#/" class="right" ng-click="cancel()">Cancel</a>
+    </form>
+  </div>
+
+</div>
