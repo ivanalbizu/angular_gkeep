@@ -7,6 +7,6 @@ version 0.14.0.
 
 Run `grunt` for building and `grunt serve` for preview.
 
-## Testing
+## Explication
 
-Running `grunt test` will run the unit tests with karma.
+In my Blog it is explained the code and even a video.
