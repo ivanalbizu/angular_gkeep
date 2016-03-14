@@ -1,45 +1,57 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('gkeepApp')
-  .controller('TasksCtrl', ['$scope', 'TaskServices',
-    function ($scope, TaskServices) {
+  angular.module('gkeepApp')
+    .controller('TasksCtrl', TasksCtrl);
 
-      $scope.getAll = function() {
+    TasksCtrl.$inject = ['$rootScope', 'TaskServices'];
+    function TasksCtrl($rootScope, TaskServices) {
+      var vm = this;
+
+      vm.tasks = [];
+      vm.getAll = getAll;
+      vm.deleteTask = deleteTask;
+      vm.saveTask = saveTask;
+      vm.cancelCreateTask = cancelCreateTask;
+      vm.updateTask = updateTask;
+      vm.saveColor = saveColor;
+
+      function getAll() {
         TaskServices.get_all({},
           function success(response) {
-            $scope.tasks = response;
+            vm.tasks = response;
           },
           function error(errorResponse){
             console.log("Error: "+ JSON.stringify(errorResponse));
           }
-        )
+        );
       }
 
-      $scope.save = function(data) {
+      function saveTask(data) {
         TaskServices.save(data,
           function success(response) {
             document.getElementById('newtask').style.display = "none";
-            $scope.newtask='';
-            $scope.getAll();
+            vm.newtask='';
+            vm.getAll();
           },
           function error(errorResponse) {
             alert("Empty fields");
           }
-        )
+        );
       };
 
-      $scope.delete = function(id) {
+      function deleteTask(id) {
         TaskServices.delete({id: id},
           function success(response) {
-            $scope.getAll();
+            vm.getAll();
           },
           function error(errorResponse) {
             console.log("Error:"	+	JSON.stringify(errorResponse));
           }
-        )
+        );
       };
 
-      $scope.saveColor = function(id, data, color) {
+      function saveColor(id, data, color) {
         var task = {
           'id': id,
           'title': data.title,
@@ -48,33 +60,35 @@ angular.module('gkeepApp')
         };
         TaskServices.update({id: id}, task,
           function success(response) {
-            $scope.getAll();
+            vm.getAll();
           },
           function error(errorResponse) {
             console.log("Error:"	+	JSON.stringify(errorResponse));
           }
-        )
+        );
       };
 
-      $scope.update = function(id, data) {
+      function updateTask(id, data) {
         if (data.description !== '' && data.title !== ''){
           TaskServices.update({id: id}, data,
             function success(response) {
-              $scope.getAll();
+              vm.getAll();
             },
             function error(errorResponse) {
               console.log("Error:"	+	JSON.stringify(errorResponse));
             }
-          )
+          );
         } else {
-          $scope.getAll();
+          vm.getAll();
           alert("Empty fields");
         }
       };
 
-      $scope.cancel = function() {
+      function cancelCreateTask() {
         document.getElementById('newtask').style.display = "none";
-        $scope.newtask='';
+        vm.newtask='';
       };
 
-  }]);
+  }
+})();
+

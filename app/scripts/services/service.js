@@ -1,8 +1,11 @@
-'use strict';
+(function() {
+  'use strict';
 
-angular.module('gkeepApp')
-  .factory('TaskServices', ['$resource',
-    function ($resource) {
+  angular.module('gkeepApp')
+    .factory('TaskServices', TaskServices);
+
+    TaskServices.$inject = ['$resource', '$rootScope'];
+    function TaskServices($resource, $rootScope) {
       var url_one = 'http://127.0.0.1:8000/tasks/:id';
       var url_all = 'http://127.0.0.1:8000/tasks';
       return $resource(
@@ -14,4 +17,6 @@ angular.module('gkeepApp')
           get_all: {method: 'GET', url: url_all, cache: false, isArray: true},
         }
       );
-  }]);
+    }
+})();
+
